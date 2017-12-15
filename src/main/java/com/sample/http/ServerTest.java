@@ -13,7 +13,7 @@ public class ServerTest {
 	public static void main(String[] args) {
 		//声明变量
                 ServerSocket ss=null;
-                Socket s=null;
+
                 boolean flag=true;
 
                 try {
@@ -25,30 +25,41 @@ public class ServerTest {
 					while(flag)
 					{
 						//接受客户端发送过来的Socket
-						s=ss.accept();
-						HttpCreatorImpl hci=new HttpCreatorImpl(s);
-						HttpRequest request=hci.getHttpRequest();
-						HttpResponse response=hci.getHttpResponse();
-						HttpAccessProcessor hapi=hci.getHttpAccessProcessor();
+                        final Socket s=ss.accept();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                HttpCreatorImpl hci=new HttpCreatorImpl(s);
+                                HttpRequest request=hci.getHttpRequest();
+                                HttpResponse response=hci.getHttpResponse();
+                                HttpAccessProcessor hapi=hci.getHttpAccessProcessor();
 
-						//	用于测试收到的信息
-						if(request.isStaticResource())//处理静态信息
-						{
-							System.out.println("静态");
-							hapi.processStaticResource(request, response);
-							System.out.println("静态加载完成");
-						}
- 						else if(request.isDynamicResource())//处理动态请求
-						{
-							System.out.println("动态");
-							hapi.processDynamicResource(request, response);
-						} else {
-							System.out.println("无法处理");
-							hapi.sendError(404, request, response);
-							//new XmlToHtmlJs().analysisXml();
-							//System.out.println("生成html文件");
-						}
-						s.close();
+                                //	用于测试收到的信息
+                                if(request.isStaticResource())//处理静态信息
+                                {
+                                    System.out.println("静态");
+                                    hapi.processStaticResource(request, response);
+                                    System.out.println("静态加载完成");
+                                }
+                                else if(request.isDynamicResource())//处理动态请求
+                                {
+                                    System.out.println("动态");
+                                    hapi.processDynamicResource(request, response);
+                                } else {
+                                    System.out.println("无法处理");
+                                    hapi.sendError(404, request, response);
+                                    //new XmlToHtmlJs().analysisXml();
+                                    //System.out.println("生成html文件");
+                                }
+                                try {
+                                    if(s!=null) {
+                                        s.close();
+                                    }
+                                }catch (Exception ex){
+                                }
+                            }
+                        }).start();
+
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

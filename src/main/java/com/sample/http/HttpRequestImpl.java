@@ -144,9 +144,9 @@ public class HttpRequestImpl implements HttpRequest{
         System.out.println("进入isStaticResource()方法");      
         if (requestPath != null) {
             String parent = System.getProperty("user.dir")+File.separator+"navigationHtml";
-			System.out.println(parent+File.separator+requestPath);
+			System.out.println(parent+File.separator+requestPath.substring(1));
 
-            File file = new File(parent+File.separator+requestPath);
+            File file = new File(parent+File.separator+requestPath.substring(1));
 
             return file.exists() && file.isFile();
         }
