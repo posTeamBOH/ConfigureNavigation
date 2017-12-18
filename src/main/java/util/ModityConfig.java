@@ -179,7 +179,8 @@ public class ModityConfig {
                 if (no.equals("0")) {
                     inner.setIp(map.get(key));
                 } else {
-                    inner.setPort(Integer.parseInt(map.get(key)));
+
+                    inner.setPort(map.get(key));
                 }
                 map1.put(name, inner);
             }

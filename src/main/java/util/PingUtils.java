@@ -2,6 +2,7 @@ package util;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.regex.Pattern;
 
 /**
  * 后台数据检验ping
@@ -11,29 +12,32 @@ import java.net.Socket;
 public class PingUtils {
 
 	private String ip;
-	private int port;
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-
-	public void setPort(int port) {
-		this.port = port;
-	}
+	private String port;
 
 	public String getIp() {
 		return ip;
 	}
 
-	public int getPort() {
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getPort() {
 		return port;
 	}
 
+	public void setPort(String port) {
+		this.port = port;
+	}
+
 	public  boolean isHostConnectable() {
+		//排错
+		if (ip.equals("") || !isNumberic(port)) {
+			return false;
+		}
 		Socket socket = new Socket();
 		try {
-			socket.connect(new InetSocketAddress(this.ip, this.port), 10);
+			socket.connect(new InetSocketAddress(this.ip, Integer.parseInt(port)), 10);
 		} catch (IOException e) {
 			return false;
 		}finally {
@@ -46,4 +50,16 @@ public class PingUtils {
 		return true;
 	}
 
+	//判断port是否为全数字的
+	private boolean isNumberic(String port) {
+		if (port.equals("")) {
+			return false;
+		}
+		Pattern pattern = Pattern.compile("[0-9]*");
+		return pattern.matcher(port).matches();
+	}
+
+	public static void main(String[] args) {
+		System.out.println(new PingUtils().isNumberic(""));
+	}
 }

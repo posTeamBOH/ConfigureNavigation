@@ -20,7 +20,7 @@ public class ServerTest {
                 	int port=7893;
                 	System.out.println("Server Port:"+port);
 					ss=new ServerSocket(port, 1024);
-                    //initWebapp();
+                    initWebapp();
                     openDefaultBrowser();
 					while(flag)
 					{

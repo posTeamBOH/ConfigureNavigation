@@ -204,8 +204,32 @@ public class XmlToHtmlJs {
             tdElement.setText(nameString);
             Element input = trElement.addElement("input");
             input.addAttribute("type", "text");
-            input.addAttribute("id", idString);
 
+            List textFieldPing =  textField.selectNodes("@ping");
+            String textFieldPingString = (textFieldPing.size() > 0) ? ((Attribute) textFieldPing.get(0)).getValue() : "";
+            List textFieldPingId = textField.selectNodes("@pingid");
+            String textFieldPingIdString = (textFieldPingId.size() > 0) ? ((Attribute) textFieldPingId.get(0)).getValue() : "";
+
+            if (!textFieldPingString.equals("") && !textFieldPingIdString.equals("")) {
+                idString = idString + ";##;" + textFieldPingString + ";##;" + textFieldPingIdString;
+                //带ping的默认不能为空
+                input.addAttribute("data-type", "notnull");
+                input.addAttribute("data-name", nameString);
+            }
+
+            input.addAttribute("id", idString);
+            //input的类型
+            List typeElements = textField.selectNodes("@type");
+            if (typeElements.size() > 0) {
+                String typeString = ((Attribute) typeElements.get(0)).getValue();
+                if (typeString.equals("folder")) {
+                    input.addAttribute("data-type", "folder");
+                }else if(typeString.equals("notnull")) {
+                    input.addAttribute("data-type", "notnull");
+                    input.addAttribute("data-name", nameString);
+                }
+
+            }
             //每一行的默认值
             List valueTextFieldAttribute = textField.selectNodes("@value");
             if (valueTextFieldAttribute.size() > 0) {
@@ -248,10 +272,23 @@ public class XmlToHtmlJs {
                 String idString = afterSplice + ";::;" + rule + ";::;" + headString + ";::;" + ooi;
                 input.addAttribute("id", idString);
 
+                //input的类型 each每一项都不能为空
+                input.addAttribute("data-type", "notnull");
+                input.addAttribute("data-name", nameString);
+
+                List typeElements = textField.selectNodes("@type");
+                if (typeElements.size() > 0) {
+                    String typeString = ((Attribute) typeElements.get(0)).getValue();
+                    if (typeString.equals("folder")) {
+                        input.addAttribute("data-type", "folder");
+                    }
+
+                }
+
                 List textFieldPing =  textField.selectNodes("@ping");
                 String textFieldPingString = (textFieldPing.size() > 0) ? ((Attribute) textFieldPing.get(0)).getValue() : "";
                 List textFieldPingId = textField.selectNodes("@pingid");
-                String textFieldPingIdString = (textFieldPingId.size() > 0) ? ((Attribute) textFieldPingId.get(0)).getValue() : "";;
+                String textFieldPingIdString = (textFieldPingId.size() > 0) ? ((Attribute) textFieldPingId.get(0)).getValue() : "";
 
                 if (!textFieldPingString.equals("") && !textFieldPingIdString.equals("")) {
                     idString = idString + ";##;" + textFieldPingString + ";##;" + textFieldPingIdString;
@@ -308,7 +345,32 @@ public class XmlToHtmlJs {
             tdElement.setText(affectText);
             Element input = trElement.addElement("input");
             input.addAttribute("type", "text");
+
+            List textFieldPing =  affectElement.selectNodes("@ping");
+            String textFieldPingString = (textFieldPing.size() > 0) ? ((Attribute) textFieldPing.get(0)).getValue() : "";
+            List textFieldPingId = affectElement.selectNodes("@pingid");
+            String textFieldPingIdString = (textFieldPingId.size() > 0) ? ((Attribute) textFieldPingId.get(0)).getValue() : "";
+
+            if (!textFieldPingString.equals("") && !textFieldPingIdString.equals("")) {
+                affectId = affectId + ";##;" + textFieldPingString + ";##;" + textFieldPingIdString;
+                //带ping的默认不能为空
+                input.addAttribute("data-type", "notnull");
+                input.addAttribute("data-name", affectText);
+            }
+
             input.addAttribute("id", affectId);
+
+            //input的类型
+            List typeElements = affectElement.selectNodes("@type");
+            if (typeElements.size() > 0) {
+                String typeString = ((Attribute) typeElements.get(0)).getValue();
+                if (typeString.equals("folder")) {
+                    input.addAttribute("data-type", "folder");
+                }else if(typeString.equals("notnull")) {
+                    input.addAttribute("data-type", "notnull");
+                    input.addAttribute("data-name", affectText);
+                }
+            }
         }
     }
 
@@ -407,6 +469,7 @@ public class XmlToHtmlJs {
     }
 
     public static void main(String[] args) {
+
         new XmlToHtmlJs().analysisXml();
     }
 }

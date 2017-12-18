@@ -202,16 +202,23 @@ function init() {
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
-                let data = xmlhttp.responseText;
+                let a = window.confirm("确定保存？");
+                if (a == true) {
+                    let data = xmlhttp.responseText;
                     console.log(JSON.parse(data));
                     data = JSON.parse(data);
                     if (data.type == "1") {
-                        alert("确认保存!");
+                        alert("保存成功");
+                        window.location = "/last.html";
                     } else if (data.type == "0"){
-                        alert(data.message);
+                        alert("保存失败：" + data.message);
                     }else {
                         alert("保存失败!")
+                    }
                 }
+
+
+
             }
         }
         xmlhttp.open("POST", "http://localhost:7893/final", true);
@@ -250,6 +257,16 @@ function init() {
     next.onclick = function () {
         let param = '';
         for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input').length; i++) {
+            var str = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i];
+            var pattern = /^[a-zA-Z]:(([a-zA-Z]*)||([a-zA-Z]*\\))*/;//判断路径是否合法的正则表达式
+
+            if (str.getAttribute("data-type") == "folder" && !pattern.test(str.value)) {
+                alert("文件夹目录不合格");
+                return;
+            }else if(str.getAttribute("data-type") == "notnull" && str.value == "") {
+                alert(str.getAttribute("data-name") + "不能为空");
+                return;
+            }
             param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].id + '=' + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].value + '&'
         }
         //处理radio
@@ -269,6 +286,17 @@ function init() {
     final.onclick = () => {
         let param = '';
         for (let i = 0; i < document.querySelectorAll('.main input').length; i++) {
+
+            var str = document.querySelectorAll('.main input')[i];
+            var pattern = /^[a-zA-Z]:(([a-zA-Z]*)||([a-zA-Z]*\\))*/;//判断路径是否合法的正则表达式
+
+            if (str.getAttribute("data-type") == "folder" && !pattern.test(str.value)) {
+                alert("文件夹目录不合格");
+                return;
+            }else if(str.getAttribute("data-type") == "notnull" && str.value == "") {
+                alert(str.getAttribute("data-name") + "不能为空");
+                return;
+            }
             param = param + document.querySelectorAll('.main input')[i].id + '=' + document.querySelectorAll('.main input')[i].value + '&'
         }
         console.log(document.querySelectorAll('.radioMain input'))
