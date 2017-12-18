@@ -1,5 +1,6 @@
 package com.sample.servlet;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +22,30 @@ public class MyJson {
         System.out.println(json + "json");
         return json;
     }
+
+    private String typeParm;
+    private String message;
+
+
+    public MyJson(String typeParm, String message) {
+        this.typeParm = typeParm;
+        this.message = message;
+    }
+
+    public String getTypeParm() {
+        return typeParm;
+    }
+
+    public String typeAndMassageJSON(){
+        String json = "";
+        json += "{";
+        json += "\"" + "type" + "\"" + ":" + "\"" + typeParm + "\"";
+        if (!this.message.equals("")) {
+            json += "," + "\"" + "message" + "\"" + ":" + "\"" + message + "\"";
+        }
+        json += "}";
+        System.out.println(json + "&*&*&******************************************");
+        return json;
+    }
+
 }

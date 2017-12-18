@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<steps >
-    <location>/server/realtimestatics/conf/Test.properties</location>
+<steps>
+    <location>F:\IDEA\ConfigureNavigation\src\main\java\test\Test.properties</location>
     <step name="数据库配置">
         <!--文本框输入框-->
         <textField id="name" value="root">用户名</textField>
         <textField id="password" value="123456">密码</textField>
         <textFields id="url" rule=":" head="jdbc:oracle:thin:@">
-            <Each value="1.1.1.1">IP</Each>
-            <Each value="3306">端口号</Each>
+
+            <Each value="1.1.1.1" ping="ping" pingid="0">IP</Each>
+            <Each value="3306" ping="ping" pingid="1">端口号</Each>
             <Each value="orcle">实例名</Each>
         </textFields>
         <!--默认选的在第一个-->
@@ -27,14 +28,13 @@
             <Affected id="cacheFilePath" value="D:\\filedir\\cacheFile"></Affected>
             <Affected id="historyFile" value="D:\\filedir\\historycacheFile"></Affected>
         </Affect>
-
     </step>
     <step name="mq配置">
         <!--rule 不能为"", head可以为不能为字符"null", 每一个each必须得有验证不能为空-->
         <textFields id="mq.url" rule=":" head="">
-            <Each value="localhost">访问地址</Each>
-            <Each value="61616">访问端口</Each>
+            <Each ping="ping2" pingid="0">访问地址</Each>
+            <Each ping="ping2" pingid="1">访问端口</Each>
         </textFields>
-        <textField id="mq.queue" value="testmq">监听队列</textField>
+        <textField id="mq.queue">监听队列</textField>
     </step>
 </steps>

@@ -20,7 +20,7 @@ public class ServerTest {
                 	int port=7893;
                 	System.out.println("Server Port:"+port);
 					ss=new ServerSocket(port, 1024);
-                    initWebapp();
+                    //initWebapp();
                     openDefaultBrowser();
 					while(flag)
 					{
@@ -81,7 +81,7 @@ public class ServerTest {
         try {
             String os = System.getProperty("os.name");
             if(os.toLowerCase().startsWith("win")){
-                URI uri = new URI("http://120.27.19.38:7893/welcome.html");
+                URI uri = new URI("http://localhost:7893/welcome.html");
                 Desktop.getDesktop().browse(uri);
             }
         } catch (URISyntaxException e) {

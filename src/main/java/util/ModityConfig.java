@@ -1,6 +1,8 @@
 package util;
 
 
+import com.sample.servlet.MyJson;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,18 +12,10 @@ import java.util.*;
 
 public class ModityConfig {
     static String pathName = PathUtils.getPath();
-    static HashMap<String, String> MAPS = new HashMap<String,String>();
-    public static void updateMaps(String key, String values) {
-        MAPS.put(key, values);
-    }
-
-    public static String getPathName() {
-        return pathName;
-    }
     /**
      *将修改保存到配置文件
      */
-    public static void update(){
+    public static boolean update(Map<String, String> maps){
         Properties prop = new Properties();
         InputStream inputFile;
         OutputStream outputFile;
@@ -30,30 +24,20 @@ public class ModityConfig {
             prop.load(inputFile);
             outputFile = new FileOutputStream(new File(pathName));
             //设值-保存
-            for (String key : MAPS.keySet()) {
-                String value = MAPS.get(key);
+            for (String key : maps.keySet()) {
+                String value = maps.get(key);
                 prop.setProperty(key, value);
 
             }
             prop.store(outputFile, "Update" );
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        clearMaps();
-    }
-
-    /**
-     * 清楚map缓存
-     */
-    public static void clearMaps(){
-        MAPS.clear();
-    }
-
-    public static void prinMaps(){
-        for (String key : MAPS.keySet()) {
-            System.out.println(key + " : " + MAPS.get(key));
+            return false;
         }
     }
+
+
 
     /**
      * 得到value(先从缓存里取，再从文件中取)
@@ -61,16 +45,22 @@ public class ModityConfig {
     public static Map<String, String> getValue(Map<String, String> parameterMap) {
         Properties prop = new Properties();
         InputStream inputFile;
-        int i = 0;
-        Map<String, String> returnValues = new HashMap<String,String>();
+        Map<String, String> returnValues = new HashMap<>();
         try {
             inputFile = new FileInputStream(new File(pathName));
             prop.load(inputFile);
             for (String keyInitial : parameterMap.keySet()) {
+                //处理有ping的
+                String keyInitialCopy = keyInitial;
+                String[] arg0 = keyInitial.split(";##;");
+                keyInitial = arg0[0];
+
                 String key;
                 int number = 0;
                 String head = "";
                 String rule = "";
+                String[] keyArg0 = keyInitial.split(";##;");
+                keyInitial = keyArg0[0];
                 if (keyInitial.contains(";::;")) {
                     String[] keys = keyInitial.split(";::;");
                     key = keys[0];
@@ -85,13 +75,8 @@ public class ModityConfig {
 
                 }
 
-                String values = "";
-                if (MAPS.get(key) != null) {
-                    values = MAPS.get(key);
-                }else{
-                    Object object = prop.get(key);
-                    values = (object == null) ? "" : (String) object;
-                }
+                Object object = prop.get(key);
+                String values = (object == null) ? "" : (String) object;
                 if (keyInitial.contains(";::;") &&  !values.equals("")) {
                     String v;
                     if (head.equals("null")) {
@@ -99,13 +84,11 @@ public class ModityConfig {
                     } else {
                         v = values.substring(head.length(), values.length());
                     }
-                    System.out.println("v090909   " + v);
                     String[] vs = v.split(rule);
-                    if(vs.length>number)
-                        values = vs[number];
+                    values = vs[number];
 
                 }
-                returnValues.put(keyInitial, values);
+                returnValues.put(keyInitialCopy, values);
             }
 
         } catch (FileNotFoundException e) {
@@ -119,11 +102,21 @@ public class ModityConfig {
     }
 
     /**
-     * 处理参数
+     * 处理存数据时候的参数
      */
     public static Map<String, String> processData(Map<String, String> initial) {
-        Map<String, String> trueData = new HashMap<String,String>();
+        Map<String, String> trueData = new HashMap<>();
 
+
+        //处理有ping的
+        Map<String, String> ini = new HashMap<>();
+        for (String key : initial.keySet()) {
+            String value = initial.get(key);
+            String[] arg0 = key.split(";##;");
+            ini.put(arg0[0], value);
+        }
+
+        initial = ini;
 
         /**
          * 因为HashMap无序，为保证拼接时候正确，所以得先排序
@@ -134,6 +127,7 @@ public class ModityConfig {
 
         for (int keyi = 0; keyi < keyList.size(); keyi++) {
             String key = keyList.get(keyi);
+            System.out.println(key+"hheh");
             if(key.contains(";**;")) {
                 String[] k = key.split(";[*][*];");
                 Map<String, String> m=new HashMap<String, String>();
@@ -146,6 +140,7 @@ public class ModityConfig {
                     trueData.put(k[i], m2.get(k[i]).replace(base, initial.get(key)));
                 }
             } else if (key.contains(";::;")) {
+                System.out.println(key + "hahaha");
                 String[] keys = key.split(";::;");
                 String id = keys[0];
                 String rule = keys[1];
@@ -170,8 +165,44 @@ public class ModityConfig {
     }
 
 
+    //参数校验
+    public static MyJson isPing(Map<String, String> map) {
+        Map<String, PingUtils> map1=new HashMap<>();
+        for(String key : map.keySet()) {
+            if (key.contains(";##;")) {
+                System.out.println("包含");
+                String[] ks = key.split(";##;");
+                String name = ks[1];
+                String no = ks[2];
+                PingUtils inner = null;
+                inner = (map1.get(name) == null) ? new PingUtils() : map1.get(name);
+                if (no.equals("0")) {
+                    inner.setIp(map.get(key));
+                } else {
+                    inner.setPort(Integer.parseInt(map.get(key)));
+                }
+                map1.put(name, inner);
+            }
+        }
+
+        MyJson myJson;
+        for (String key : map1.keySet()) {
+            PingUtils pingUtil = map1.get(key);
+            if (!pingUtil.isHostConnectable()) {
+                //ping失败,发送false字符串
+                myJson = new MyJson("0", pingUtil.getIp() + "和" + pingUtil.getPort() + "ping不成功");
+                return myJson;
+            }
+        }
+        myJson = new MyJson("1", "");
+        return myJson;
+    }
+
+
     public static void main(String[] args) {
         // ModityConfig.processData();
         //System.out.println(ModityConfig.getValues("jdbcurl;::;:;::;jdbc:oracle:thin:@;::;0"));
     }
+
+
 }
