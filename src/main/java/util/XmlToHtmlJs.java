@@ -1,14 +1,12 @@
 package util;
 
+import com.sample.utils.ServerPortUtils;
 import org.choice.dom4j.*;
 import org.choice.dom4j.io.OutputFormat;
 import org.choice.dom4j.io.SAXReader;
 import org.choice.dom4j.io.XMLWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.text.Format;
 import java.util.HashMap;
@@ -18,6 +16,9 @@ import java.util.Properties;
 
 public class XmlToHtmlJs {
     public void analysisXml() {
+        produceWelcome();
+        produceLast();
+        produceJs();
         try {
             Map<String, String> MAPS = new HashMap<String,String>();
             SAXReader reader = new SAXReader();
@@ -464,10 +465,487 @@ public class XmlToHtmlJs {
         } catch (IOException e) {
         }
     }
+    /**
+     生成欢迎页面和结束页面
+     */
+    private void produceWelcome(){
+        String urlString = String.format("%s:%s", ServerPortUtils.getIp(), ServerPortUtils.getPort());
+        String s=String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<html>\n" +
+                "\n" +
+                "<head>\n" +
+                " <meta charset=\"UTF-8\">\n" +
+                " <style>\n" +
+                "  .clearfix:after {\n" +
+                "   content: \"\";\n" +
+                "   clear: both;\n" +
+                "   display: block;\n" +
+                "  }\n" +
+                "\n" +
+                "  .container {\n" +
+                "   width: 300px;\n" +
+                "   margin: 30px auto;\n" +
+                "  }\n" +
+                "\n" +
+                "  .title {\n" +
+                "   text-align: center;\n" +
+                "\n" +
+                "  }\n" +
+                "\n" +
+                "  .row {\n" +
+                "   margin: 10px 0;\n" +
+                "  }\n" +
+                "\n" +
+                "  .row span {\n" +
+                "   float: left;\n" +
+                "  }\n" +
+                "\n" +
+                "  .row input {\n" +
+                "   float: right;\n" +
+                "  }\n" +
+                "\n" +
+                "  .bottom {\n" +
+                "   margin-top: 20px;\n" +
+                "   text-align: center;\n" +
+                "  }\n" +
+                "\n" +
+                "  .bottom button {\n" +
+                "   width: 60px;\n" +
+                "  }\n" +
+                " </style>\n" +
+                " </meta>\n" +
+                " <title>欢迎配置</title>\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "<div class=\"container\">\n" +
+                " <h2 class=\"title\">欢迎来到配置页面</h2>\n" +
+                "\n" +
+                " <div class=\"bottom\">\n" +
+                "  <button type=\"button\" id=\"next\">开始</button>\n" +
+                " </div>\n" +
+                "\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>\n" +
+                "<script>\n" +
+                "    function init() {\n" +
+                "\n" +
+                "        let next = document.getElementById('next');\n" +
+                "        let param = '';\n" +
+                "        //开始\n" +
+                "        function nextPage(param) {\n" +
+                "            let xmlhttp;\n" +
+                "            if (window.XMLHttpRequest) {\n" +
+                "                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码\n" +
+                "                xmlhttp = new XMLHttpRequest();\n" +
+                "            } else {\n" +
+                "                // IE6, IE5 浏览器执行代码\n" +
+                "                xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");\n" +
+                "            }\n" +
+                "            xmlhttp.onreadystatechange = function() {\n" +
+                "                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n" +
+                "\n" +
+                "                    let data = xmlhttp.responseText;\n" +
+                "                    console.log(data);\n" +
+                "                    window.location.href = data;\n" +
+                "                }\n" +
+                "            }\n" +
+                "            xmlhttp.open(\"POST\", \"http://%s/welcome\", true);\n" +
+                "            xmlhttp.send(param);\n" +
+                "        }\n" +
+                "\n" +
+                "        //开始\n" +
+                "        next.onclick = function() {\n" +
+                "            nextPage(param);\n" +
+                "            console.log(param);\n" +
+                "        };\n" +
+                "\n" +
+                "    }\n" +
+                "\n" +
+                "    window.addEventListener(\"load\", init, false);\n" +
+                "</script>\n",urlString);
+        String parent = System.getProperty("user.dir")+File.separator+"navigationHtml"+File.separator;
+        new File(parent).mkdirs();
+        String path = String.format("%s%s", parent, "welcome.html");
+        try {
+            OutputStream out = new FileOutputStream(new File(path));
+            out.write(s.getBytes());
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 生成last页面
+     */
+    private  void produceLast(){
+        String s="<!DOCTYPE html>\n" +
+                "<html >\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>配置结束</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<h1 align=\"center\">配置成功</h1>\n" +
+                "</body>\n" +
+                "</html>";
+        String parent = System.getProperty("user.dir")+File.separator+"navigationHtml"+File.separator;
+        new File(parent).mkdirs();
+        String path = String.format("%s%s", parent, "last.html");
+        try {
+            OutputStream out = new FileOutputStream(new File(path));
+            out.write(s.getBytes());
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * 生成js
+     *
+     */
+    private void produceJs() {
+        String urlString = String.format("%s:%s", ServerPortUtils.getIp(), ServerPortUtils.getPort());
+        String jsString = String.format("function init() {\n" +
+                "    /*\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "      变量区\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "*/\n" +
+                "\n" +
+                "    // 全局变量\n" +
+                "    class Number {\n" +
+                "        constructor(nowPageNumber) {\n" +
+                "            this.nowPageNumber = nowPageNumber;\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    let Num = new Number(1);  //指定当前页码\n" +
+                "    const allPageNumber = document.getElementsByTagName(\"section\").length;\n" +
+                "\n" +
+                "    // 全局 Array\n" +
+                "    let infos = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input'); // now Page Info\n" +
+                "    let allInfos = document.querySelectorAll('.main input'); // all Page Info\n" +
+                "    let radioInfos = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input');  // now Page Info\n" +
+                "    let allRadioInfos = document.querySelectorAll('.radioMain input'); // all Page Info\n" +
+                "\n" +
+                "    // 按钮\n" +
+                "    let reset = document.getElementById('reset');\n" +
+                "    let last = document.getElementById(\"last\");\n" +
+                "    let next = document.getElementById('next');\n" +
+                "    let final = document.getElementById('final');\n" +
+                "\n" +
+                "    // 信息\n" +
+                "    let param = '';\n" +
+                "\n" +
+                "    /*\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "    功能区Func\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                " */\n" +
+                "\n" +
+                "    //基础信息获取函数\n" +
+                "    function getParam() {\n" +
+                "        param = '';\n" +
+                "        console.log(Num.nowPageNumber)\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input').length; i++) {\n" +
+                "            param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].id + '=&'\n" +
+                "        }\n" +
+                "        //处理radio\n" +
+                "        let temporary = '';\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input').length; i++) {\n" +
+                "            if (temporary != document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name) {\n" +
+                "                temporary = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name;\n" +
+                "                param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name + '=&'\n" +
+                "            }\n" +
+                "        }\n" +
+                "        param = param.slice(0, param.length - 1)\n" +
+                "\n" +
+                "        // console.log(param,document.querySelectorAll('#modify'+Num.nowPageNumber+' .main input'));\n" +
+                "        return param;\n" +
+                "    }\n" +
+                "\n" +
+                "    // 更换按钮\n" +
+                "    function updateButton(type) {\n" +
+                "        if (type === 0) {\n" +
+                "            //第一页\n" +
+                "            final.style.display = 'none';\n" +
+                "            last.style.display = 'none';\n" +
+                "            next.style.display = 'inline-block';\n" +
+                "        } else if (type === 1) {\n" +
+                "            //中间页\n" +
+                "            final.style.display = 'none';\n" +
+                "            last.style.display = 'inline-block';\n" +
+                "            next.style.display = 'inline-block';\n" +
+                "        } else if (type === 2) {\n" +
+                "            //尾页\n" +
+                "            final.style.display = 'inline-block';\n" +
+                "            last.style.display = 'inline-block';\n" +
+                "            next.style.display = 'none';\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    /*\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "    初始化定义区\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                " */\n" +
+                "\n" +
+                "    //初始值的获取\n" +
+                "    function getInfo(param) {\n" +
+                "        console.log(param);\n" +
+                "        let xmlhttp;\n" +
+                "        if (window.XMLHttpRequest) {\n" +
+                "            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码\n" +
+                "            xmlhttp = new XMLHttpRequest();\n" +
+                "        } else {\n" +
+                "            // IE6, IE5 浏览器执行代码\n" +
+                "            xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");\n" +
+                "        }\n" +
+                "        xmlhttp.onreadystatechange = function () {\n" +
+                "            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n" +
+                "\n" +
+                "                let data = xmlhttp.responseText;\n" +
+                "                data = JSON.parse(data);\n" +
+                "                console.log(data);\n" +
+                "                for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input').length; i++) {\n" +
+                "                    document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].value = data[document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].id];\n" +
+                "                }\n" +
+                "\n" +
+                "                //radio配置\n" +
+                "                let t = '';\n" +
+                "                for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input').length; i++) {\n" +
+                "                    if (document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name != t) {\n" +
+                "                        if (data[document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name] == null || data[document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name] == '') {\n" +
+                "                            document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].checked = true;\n" +
+                "                        } else {\n" +
+                "                            document.getElementById(document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name + data[document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name]).checked = true;\n" +
+                "                        }\n" +
+                "                        t = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name;\n" +
+                "                    }\n" +
+                "                }\n" +
+                "                //\n" +
+                "            }\n" +
+                "        }\n" +
+                "        xmlhttp.open(\"POST\", \"http://%s/getdata\", true);\n" +
+                "        xmlhttp.send(param);\n" +
+                "\n" +
+                "    }\n" +
+                "\n" +
+                "    /*\n" +
+                "        `               ``````````````````````````````````````````````````````````````````````\n" +
+                "         初始化执行区\n" +
+                "        `               ``````````````````````````````````````````````````````````````````````\n" +
+                "     */\n" +
+                "    getParam();\n" +
+                "    getInfo(param);\n" +
+                "    updateButton(1);\n" +
+                "    console.log('当前页码为:', Num.nowPageNumber);\n" +
+                "    console.log('当前Page的所有表单信息为：', infos, radioInfos);\n" +
+                "    console.log('所有Page的表单信息为：', allInfos, allRadioInfos);\n" +
+                "    console.log(param);\n" +
+                "    document.getElementById(\"modify\" + Num.nowPageNumber).style.display = \"block\";\n" +
+                "    /*\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "    Impl区\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                " */\n" +
+                "\n" +
+                "    //上一步\n" +
+                "    function lastPage(param) {\n" +
+                "        if (Num.nowPageNumber != 2) updateButton(1);\n" +
+                "        else updateButton(0);\n" +
+                "        document.getElementById(\"modify\" + Num.nowPageNumber).style.display = \"none\";\n" +
+                "        Num.nowPageNumber--;\n" +
+                "        document.getElementById(\"modify\" + Num.nowPageNumber).style.display = \"block\";\n" +
+                "    }\n" +
+                "\n" +
+                "    //下一步\n" +
+                "    function nextPage(param) {\n" +
+                "        let xmlhttp;\n" +
+                "        if (window.XMLHttpRequest) {\n" +
+                "            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码\n" +
+                "            xmlhttp = new XMLHttpRequest();\n" +
+                "        } else {\n" +
+                "            // IE6, IE5 浏览器执行代码\n" +
+                "            xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");\n" +
+                "        }\n" +
+                "        xmlhttp.onreadystatechange = function () {\n" +
+                "            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n" +
+                "                let data = xmlhttp.responseText;\n" +
+                "                console.log('点击下一步时候接收到的data：', JSON.parse(data));\n" +
+                "                data = JSON.parse(data);\n" +
+                "                if (data.type == true) {\n" +
+                "                    if (Num.nowPageNumber < allPageNumber - 1) {\n" +
+                "                        updateButton(1);\n" +
+                "                    } else {\n" +
+                "                        updateButton(2);\n" +
+                "                    }\n" +
+                "                    document.getElementById(\"modify\" + Num.nowPageNumber).style.display = \"none\";\n" +
+                "                    Num.nowPageNumber++;\n" +
+                "                    param = getParam();\n" +
+                "                    getInfo(param);\n" +
+                "                    document.getElementById(\"modify\" + Num.nowPageNumber).style.display = \"block\";\n" +
+                "                } else if (data.type == false) {\n" +
+                "                    alert(data.message);\n" +
+                "                } else {\n" +
+                "                    alert(\"服务器无响应!\");\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }\n" +
+                "        xmlhttp.open(\"POST\", \"http://%s/total\", true);\n" +
+                "        xmlhttp.send(param);\n" +
+                "    }\n" +
+                "\n" +
+                "    //完成\n" +
+                "    function finalPage(param) {\n" +
+                "        let xmlhttp;\n" +
+                "        if (window.XMLHttpRequest) {\n" +
+                "            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码\n" +
+                "            xmlhttp = new XMLHttpRequest();\n" +
+                "        } else {\n" +
+                "            // IE6, IE5 浏览器执行代码\n" +
+                "            xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");\n" +
+                "        }\n" +
+                "        xmlhttp.onreadystatechange = function () {\n" +
+                "            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n" +
+                "\n" +
+                "                let a = window.confirm(\"确定保存？\");\n" +
+                "                if (a == true) {\n" +
+                "                    let data = xmlhttp.responseText;\n" +
+                "                    console.log(JSON.parse(data));\n" +
+                "                    data = JSON.parse(data);\n" +
+                "                    if (data.type == \"1\") {\n" +
+                "                        window.location = \"/last.html\";\n" +
+                "                    } else if (data.type == \"0\"){\n" +
+                "                        alert(\"保存失败：\" + data.message);\n" +
+                "                    }else {\n" +
+                "                        alert(\"保存失败!\")\n" +
+                "                    }\n" +
+                "                }\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "            }\n" +
+                "        }\n" +
+                "        xmlhttp.open(\"POST\", \"http://%s/final\", true);\n" +
+                "        xmlhttp.send(param);\n" +
+                "    }\n" +
+                "\n" +
+                "    /*\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "    实现区\n" +
+                "`               ``````````````````````````````````````````````````````````````````````\n" +
+                "*/\n" +
+                "    //重置\n" +
+                "    reset.onclick = function () {\n" +
+                "        let param = '';\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input').length; i++) {\n" +
+                "            param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].id + '=&'\n" +
+                "        }\n" +
+                "        //处理radio\n" +
+                "        let temporary = '';\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input').length; i++) {\n" +
+                "            if (temporary != document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name) {\n" +
+                "                temporary = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name;\n" +
+                "                param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name + '=&'\n" +
+                "            }\n" +
+                "        }\n" +
+                "        param = param.slice(0, param.length - 1);\n" +
+                "        getInfo(param);\n" +
+                "    };\n" +
+                "\n" +
+                "    //上一步\n" +
+                "    last.onclick = function () {\n" +
+                "        lastPage(param);\n" +
+                "        console.log(param);\n" +
+                "    };\n" +
+                "    //下一步\n" +
+                "    next.onclick = function () {\n" +
+                "        let param = '';\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input').length; i++) {\n" +
+                "            var str = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i];\n" +
+                "            var pattern = /^[a-zA-Z]:(([a-zA-Z]*)||([a-zA-Z]*\\\\))*/;//判断路径是否合法的正则表达式\n" +
+                "\n" +
+                "            if (str.getAttribute(\"data-type\") == \"folder\" && !pattern.test(str.value)) {\n" +
+                "                alert(\"文件夹目录不合格\");\n" +
+                "                return;\n" +
+                "            }else if(str.getAttribute(\"data-type\") == \"notnull\" && str.value == \"\") {\n" +
+                "                alert(str.getAttribute(\"data-name\") + \"不能为空\");\n" +
+                "                return;\n" +
+                "            }\n" +
+                "            param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].id + '=' + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .main input')[i].value + '&'\n" +
+                "        }\n" +
+                "        //处理radio\n" +
+                "        for (let i = 0; i < document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input').length; i++) {\n" +
+                "            if (document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].checked == true) {\n" +
+                "                param = param + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].name + '=' + document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input')[i].value + '&'\n" +
+                "            }\n" +
+                "\n" +
+                "        }\n" +
+                "        param = param.slice(0, param.length - 1);\n" +
+                "        console.log(param);\n" +
+                "        nextPage(param);\n" +
+                "        console.log(param);\n" +
+                "    };\n" +
+                "\n" +
+                "    //完成\n" +
+                "    final.onclick = () => {\n" +
+                "        let param = '';\n" +
+                "        for (let i = 0; i < document.querySelectorAll('.main input').length; i++) {\n" +
+                "\n" +
+                "            var str = document.querySelectorAll('.main input')[i];\n" +
+                "            var pattern = /^[a-zA-Z]:(([a-zA-Z]*)||([a-zA-Z]*\\\\))*/;//判断路径是否合法的正则表达式\n" +
+                "\n" +
+                "            if (str.getAttribute(\"data-type\") == \"folder\" && !pattern.test(str.value)) {\n" +
+                "                alert(\"文件夹目录不合格\");\n" +
+                "                return;\n" +
+                "            }else if(str.getAttribute(\"data-type\") == \"notnull\" && str.value == \"\") {\n" +
+                "                alert(str.getAttribute(\"data-name\") + \"不能为空\");\n" +
+                "                return;\n" +
+                "            }\n" +
+                "            param = param + document.querySelectorAll('.main input')[i].id + '=' + document.querySelectorAll('.main input')[i].value + '&'\n" +
+                "        }\n" +
+                "        console.log(document.querySelectorAll('.radioMain input'))\n" +
+                "        //处理radio\n" +
+                "        for (let i = 0; i < document.querySelectorAll('.radioMain input').length; i++) {\n" +
+                "            if (document.querySelectorAll('.radioMain input')[i].checked == true) {\n" +
+                "                param = param + document.querySelectorAll('.radioMain input')[i].name + '=' + document.querySelectorAll('.radioMain input')[i].value + '&'\n" +
+                "            }\n" +
+                "\n" +
+                "        }\n" +
+                "        param = param.slice(0, param.length - 1);\n" +
+                "        console.log(param);\n" +
+                "        finalPage(param);\n" +
+                "        console.log(param);\n" +
+                "    };\n" +
+                "}\n" +
+                "\n" +
+                "window.addEventListener(\"load\", init, false);", urlString, urlString, urlString);
+        String parent = System.getProperty("user.dir")+File.separator+"navigationHtml"+File.separator;
+        new File(parent).mkdirs();
+        String path = String.format("%s%s", parent, "controller.js");
+        try {
+            OutputStream out = new FileOutputStream(new File(path));
+            out.write(jsString.getBytes());
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
-        URL url = Object.class.getResource("/ChoiceNavigation.xml");
-        URL url1 = XmlToHtmlJs.class.getResource("/ChoiceNavigation.xml");
-        System.out.println("hah");
+        // XmlToHtmlJs().produceJs();
+        //new XmlToHtmlJs().produceWelcome();
+        new XmlToHtmlJs().produceLast();
     }
 }

@@ -11,11 +11,6 @@ public class WelcomeServlet implements Servlet {
     public void service(HttpRequest request, HttpResponse response) {
 
         String path = "/knn.html";
-        String parent = System.getProperty("user.dir")+File.separator+"navigationHtml";
-        File file = new File(parent, path);
-        if(!(file.exists() && file.isFile())) {
-            new XmlToHtmlJs().analysisXml();
-        }
         response.printResponseData(path);
     }
 }

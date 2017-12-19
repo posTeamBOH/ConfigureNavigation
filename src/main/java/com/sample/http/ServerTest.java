@@ -82,7 +82,8 @@ public class ServerTest {
         try {
             String os = System.getProperty("os.name");
             if(os.toLowerCase().startsWith("win")){
-                URI uri = new URI("http://localhost:7893/welcome.html");
+                String urlString = String.format("http://%s:%s/welcome.html", ServerPortUtils.getIp(), ServerPortUtils.getPort());
+                URI uri = new URI(urlString);
                 Desktop.getDesktop().browse(uri);
             }
         } catch (URISyntaxException e) {
