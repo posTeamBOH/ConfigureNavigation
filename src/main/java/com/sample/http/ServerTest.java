@@ -1,5 +1,6 @@
 package com.sample.http;
 
+import com.sample.utils.ServerPortUtils;
 import util.XmlToHtmlJs;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ public class ServerTest {
                 boolean flag=true;
 
                 try {
-                	int port=7893;
+                	int port=Integer.parseInt(ServerPortUtils.getPort());
                 	System.out.println("Server Port:"+port);
 					ss=new ServerSocket(port, 1024);
                     initWebapp();

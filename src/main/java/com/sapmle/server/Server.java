@@ -12,7 +12,7 @@ public class Server {
         ServerSocket ss=null;
         Socket s=null;
         boolean flag=true;
-        	int port=Integer.valueOf(ServerPortUtils.getPortValue("serverPort"));
+        	int port=Integer.valueOf(ServerPortUtils.getPort());
         	int i=1;
         	System.out.println("Server Port:"+port);
 			try {

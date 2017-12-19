@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.Format;
 import java.util.HashMap;
 import java.util.List;
@@ -18,16 +19,12 @@ import java.util.Properties;
 public class XmlToHtmlJs {
     public void analysisXml() {
         try {
-            String pathName = "";
             Map<String, String> MAPS = new HashMap<String,String>();
             SAXReader reader = new SAXReader();
             //读入开发者的配置xml文件
             InputStream urlabs = Object.class.getResourceAsStream("/ChoiceNavigation.xml");
             initSystem();
             Document document = reader.read(urlabs);
-            List location = document.selectNodes("/steps/location");
-            //得到开发人员配置文件位置
-            pathName = ((Element) location.get(0)).getText();
 
 
             Document documentNewEach = DocumentHelper.createDocument();
@@ -456,7 +453,7 @@ public class XmlToHtmlJs {
     }
 
     //dom4j需要的
-    private void initSystem() {
+    public static void initSystem() {
         Properties properties = new Properties();
         InputStream inputStream = XmlToHtmlJs.class.getResourceAsStream("choicedom4j.properties");
         try {
@@ -469,7 +466,8 @@ public class XmlToHtmlJs {
     }
 
     public static void main(String[] args) {
-
-        new XmlToHtmlJs().analysisXml();
+        URL url = Object.class.getResource("/ChoiceNavigation.xml");
+        URL url1 = XmlToHtmlJs.class.getResource("/ChoiceNavigation.xml");
+        System.out.println("hah");
     }
 }

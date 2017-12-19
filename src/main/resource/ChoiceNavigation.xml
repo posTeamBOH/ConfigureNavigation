@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <steps>
     <location>F:\IDEA\ConfigureNavigation\src\main\java\test\Test.properties</location>
+    <ip>127.0.0.1</ip>
+    <port>7893</port>
     <step name="数据库配置">
         <!--文本框输入框-->
         <textField id="name" value="root" type="notnull">用户名</textField>
