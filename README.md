@@ -10,7 +10,9 @@
 > # 2 在pom中添加依赖
 
 ![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/1.png)
-> # 3 2.在resource根目录下创建xml文件
+> # 3 在resource根目录下创建ChoiceNavigation.xml文件并进行配置
+![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/2.png)
+
 > # 此文件中需要配置许多标签，以下介绍各种标签的用法。
 >> ##  3.1 steps标签
 
