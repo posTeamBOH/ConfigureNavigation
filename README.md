@@ -14,6 +14,16 @@
 ![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/2.png)
 
 > # 此文件中需要配置许多标签，以下介绍各种标签的用法。
+> 注：<br>
+
+> 1.标签中带ping=“ping”属性的为需要ping通后才能保存的信息，且必须成对出现，ip的pingid为0，port为1;<br> 
+
+![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/8.png)
+> 2.type属性为notnull的，用户填写配置信息时不能为空;<br>
+
+![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/6.png)
+> 3.type属性为folder的，用户填写的需为文件夹格式。
+![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/6.png)
 >> ##  3.1 steps标签
 
 >> 所有配置信息都需要在steps标签中配置。
@@ -40,6 +50,7 @@
 
 >>> step标签是用来存储每一步所配置的数据。name为每一步的名字。<br>
 ![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/6.png)
+
 >>> ### 3.1.5 textField标签
 
 >>> textField标签是用来创建普通的文本输入框，id为配置文件中的key，value为默认值。<br>
