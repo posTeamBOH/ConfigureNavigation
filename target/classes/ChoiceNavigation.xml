@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<steps>
+    <location>src\main\java\test\Test.properties</location>
+    <ip>127.0.0.1</ip>
+    <port>8080</port>
+    <step name="数据库配置">
+        <!--文本框输入框-->
+        <textField id="name" value="root" type="notnull">用户名</textField>
+        <textField id="password" value="123456">密码</textField>
+        <textFields id="url" rule=":" head="jdbc:oracle:thin:@">
+
+            <Each value="1.1.1.1" ping="ping" pingid="0">IP</Each>
+            <Each value="3306" ping="ping" pingid="1">端口号</Each>
+            <Each value="orcle">实例名</Each>
+        </textFields>
+        <!--默认选的在第一个-->
+        <radio id="on-tcp-receive" text="是否开启TCP监听">
+            <eachradio value="0">否</eachradio>
+            <eachradio value="1">是</eachradio>
+        </radio>
+        <radio id="选择动物" text="猫猫还是狗狗..">
+            <eachradio value="cat">猫猫</eachradio>
+            <eachradio value="dog">狗狗</eachradio>
+            <eachradio value="2">其他</eachradio>
+        </radio>
+    </step>
+    <step name="订单备份路径">
+        <!--文本框输入框-->
+        <Affect id="center-data-dir" text="订单备份路径" value="D:\\filedir" type="folder" >
+            <Affected id="cacheFilePath" value="D:\\filedir\\cacheFile"></Affected>
+            <Affected id="historyFile" value="D:\\filedir\\historycacheFile"></Affected>
+        </Affect>
+
+    </step>
+    <step name="mq配置">
+        <!--rule 不能为"", head可以为不能为字符"null", 每一个each必须得有验证不能为空-->
+        <textFields id="mq.url" rule=":" head="">
+            <Each ping="ping2" pingid="0">访问地址</Each>
+            <Each ping="ping2" pingid="1">访问端口</Each>
+        </textFields>
+        <textField id="mq.queue">监听队列</textField>
+    </step>
+</steps>
+
+
+        <!--
+            ;::;拼接
+            ;**;影响其他项
+            ;##;ping
+            type是folder(文件夹) === input里的data-type设置为folder
+            type是notnull(不能为空) === input里的data-type设置为notnull,data-name设置为span(注意，拼接的每一个Each默认必须不能为空)
+            <ping>必须成对出现,ping的也默认不能为空
+        -->

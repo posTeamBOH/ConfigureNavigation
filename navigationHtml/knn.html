@@ -1,0 +1,143 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8"></meta>
+        <style>
+        .clearfix:after {
+            content: "";
+            clear: both;
+            display: block;
+        }
+
+        .container {
+            width: 300px;
+            margin: 30px auto;
+        }
+
+        .title {
+            text-align: center;
+
+        }
+
+        .row {
+            margin: 10px 0;
+        }
+
+        .row span {
+            float: left;
+        }
+
+        .row input {
+            float: right;
+        }
+
+        .bottom {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .bottom button {
+            width: 60px;
+        }
+
+        .radioMain span {
+            float: left;
+        }
+
+        .radioMainRow div {
+            float: right;
+        }
+
+        .radioMainRow div input {
+            margin: 0 8px 0 8px;
+        }</style>
+        <title>配置</title>
+    </head>
+    <body>
+        <div class="container">
+            <section id="modify1" style="display: none">
+                <div class="container">
+                    <h2 class="title">配置第1步：数据库配置</h2>
+                    <div class="main">
+                        <div class="row clearfix">
+                            <span>用户名</span>
+                            <input type="text" id="name" data-type="notnull" data-name="用户名"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>密码</span>
+                            <input type="text" id="password"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>IP</span>
+                            <input type="text" id="url;::;:;::;jdbc:oracle:thin:@;::;0;##;ping;##;0" data-type="notnull" data-name="IP"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>端口号</span>
+                            <input type="text" id="url;::;:;::;jdbc:oracle:thin:@;::;1;##;ping;##;1" data-type="notnull" data-name="端口号"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>实例名</span>
+                            <input type="text" id="url;::;:;::;jdbc:oracle:thin:@;::;2" data-type="notnull" data-name="实例名"></input>
+                        </div>
+                    </div>
+                    <div class="radioMain">
+                        <div class="radioMainRow clearfix">
+                            <span>是否开启TCP监听</span>
+                            <div>
+                                <input type="radio" id="on-tcp-receive0" name="on-tcp-receive" value="0">否</input>
+                                <input type="radio" id="on-tcp-receive1" name="on-tcp-receive" value="1">是</input>
+                            </div>
+                        </div>
+                        <div class="radioMainRow clearfix">
+                            <span>猫猫还是狗狗..</span>
+                            <div>
+                                <input type="radio" id="选择动物cat" name="选择动物" value="cat">猫猫</input>
+                                <input type="radio" id="选择动物dog" name="选择动物" value="dog">狗狗</input>
+                                <input type="radio" id="选择动物2" name="选择动物" value="2">其他</input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="modify2" style="display: none">
+                <div class="container">
+                    <h2 class="title">配置第2步：订单备份路径</h2>
+                    <div class="main">
+                        <div class="row clearfix">
+                            <span>订单备份路径</span>
+                            <input type="text" id="center-data-dir;**;cacheFilePath;**;historyFile" data-type="folder"></input>
+                        </div>
+                    </div>
+                    <div class="radioMain"></div>
+                </div>
+            </section>
+            <section id="modify3" style="display: none">
+                <div class="container">
+                    <h2 class="title">配置第3步：mq配置</h2>
+                    <div class="main">
+                        <div class="row clearfix">
+                            <span>监听队列</span>
+                            <input type="text" id="mq.queue"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>访问地址</span>
+                            <input type="text" id="mq.url;::;:;::;null;::;0;##;ping2;##;0" data-type="notnull" data-name="访问地址"></input>
+                        </div>
+                        <div class="row clearfix">
+                            <span>访问端口</span>
+                            <input type="text" id="mq.url;::;:;::;null;::;1;##;ping2;##;1" data-type="notnull" data-name="访问端口"></input>
+                        </div>
+                    </div>
+                    <div class="radioMain"></div>
+                </div>
+            </section>
+            <div class="bottom">
+                <button type="button" id="last">上一步</button>
+                <button type="button" id="reset">重置</button>
+                <button type="button" id="next">下一步</button>
+                <button type="button" id="final">完成</button>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="controller.js"></script>
+</html>
