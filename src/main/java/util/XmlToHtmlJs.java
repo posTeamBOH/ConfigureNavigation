@@ -635,7 +635,7 @@ public class XmlToHtmlJs {
                 "    let allInfos = document.querySelectorAll('.main input'); // all Page Info\n" +
                 "    let radioInfos = document.querySelectorAll('#modify' + Num.nowPageNumber + ' .radioMain input');  // now Page Info\n" +
                 "    let allRadioInfos = document.querySelectorAll('.radioMain input'); // all Page Info\n" +
-                "\n" +
+                "    let allPage = document.querySelectorAll('section'); //all Page\n" +
                 "    // 按钮\n" +
                 "    let reset = document.getElementById('reset');\n" +
                 "    let last = document.getElementById(\"last\");\n" +
@@ -688,6 +688,11 @@ public class XmlToHtmlJs {
                 "            //尾页\n" +
                 "            final.style.display = 'inline-block';\n" +
                 "            last.style.display = 'inline-block';\n" +
+                "            next.style.display = 'none';\n" +
+                "        } else if (type == 3) {\n" +
+                "            //第一页(只有一页)\n" +
+                "            final.style.display = 'inline-block';\n" +
+                "            last.style.display = 'none';\n" +
                 "            next.style.display = 'none';\n" +
                 "        }\n" +
                 "    }\n" +
@@ -746,7 +751,12 @@ public class XmlToHtmlJs {
                 "     */\n" +
                 "    getParam();\n" +
                 "    getInfo(param);\n" +
-                "    updateButton(1);\n" +
+                "    if (allPage.length == 1) {\n" +
+                "        updateButton(3)\n" +
+                "    } else {\n" +
+                "        updateButton(0);\n" +
+                "    }\n" +
+                "\n" +
                 "    console.log('当前页码为:', Num.nowPageNumber);\n" +
                 "    console.log('当前Page的所有表单信息为：', infos, radioInfos);\n" +
                 "    console.log('所有Page的表单信息为：', allInfos, allRadioInfos);\n" +
