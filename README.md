@@ -16,7 +16,9 @@
 > # 此文件中需要配置许多标签，以下介绍各种标签的用法。
 >> ##  3.1 steps标签
 
->> steps标签是用来放置所有要更改的配置数据的。
+>> 所有配置信息都需要在steps标签中配置。
+
+![image](https://github.com/posTeamBOH/ConfigureNavigation/blob/master/img/15.png)
 
 >>> ###   3.1.1 location标签
 
