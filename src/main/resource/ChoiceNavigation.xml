@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <steps>
-    <location>F:\IDEA\ConfigureNavigation\src\main\java\test\Test.properties</location>
+    <location>src\main\java\test\Test.properties</location>
     <ip>127.0.0.1</ip>
     <port>8080</port>
     <step name="数据库配置">

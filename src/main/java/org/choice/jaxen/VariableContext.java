@@ -60,7 +60,7 @@ package org.choice.jaxen;
  *
  *  <p>
  *  When a variable is bound to a node-set, the
- *  actual Java object returned should be a <code>java.util.List</code>
+ *  actual Java object returned should be a <code>java.Helper.List</code>
  *  containing XML nodes from the object-model (e.g. dom4j, JDOM, DOM, etc.)
  *  being used with the XPath.
  *  </p>

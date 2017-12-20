@@ -68,7 +68,7 @@ import java.util.Set;
  * or removal of only some entries. In those rare contexts in which you use a
  * hash table to synchronize operations across threads (for example, to prevent
  * reads until after clears), you should either encase operations in
- * synchronized blocks, or instead use java.util.Hashtable.
+ * synchronized blocks, or instead use java.Helper.Hashtable.
  * 
  * <p>
  * 
@@ -136,8 +136,8 @@ import java.util.Set;
  * <p>
  * 
  * This class may be used as a direct replacement for any use of
- * java.util.Hashtable that does not depend on readers being blocked during
- * updates. Like Hashtable but unlike java.util.HashMap, this class does NOT
+ * java.Helper.Hashtable that does not depend on readers being blocked during
+ * updates. Like Hashtable but unlike java.Helper.HashMap, this class does NOT
  * allow <tt>null</tt> to be used as a key or value. This class is also
  * typically faster than ConcurrentHashMap when there is usually only one thread
  * updating the table, but possibly many retrieving values from it.

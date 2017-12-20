@@ -57,7 +57,7 @@ import org.choice.jaxen.saxpath.SAXPathException;
  *  model, using XPath semantics.
  *
  *  <p>
- *  There is a method to obtain a <code>java.util.Iterator</code>,
+ *  There is a method to obtain a <code>java.Helper.Iterator</code>,
  *  for each axis specified by XPath.  If the target object model
  *  does not support the semantics of a particular axis, an
  *  {@link org.choice.jaxen.UnsupportedAxisException} is to be thrown. If there are

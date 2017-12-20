@@ -27,7 +27,7 @@ import org.choice.dom4j.Namespace;
  */
 public class NamespaceCache {
     private static final String CONCURRENTREADERHASHMAP_CLASS
-            = "EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap";
+            = "EDU.oswego.cs.dl.Helper.concurrent.ConcurrentReaderHashMap";
 
     /**
      * Cache of {@link Map}instances indexed by URI which contain caches of
@@ -42,7 +42,7 @@ public class NamespaceCache {
     protected static Map noPrefixCache;
 
     static {
-        /* Try the java.util.concurrent.ConcurrentHashMap first. */
+        /* Try the java.Helper.concurrent.ConcurrentHashMap first. */
         try {
             Class clazz = Class
                     .forName("java.util.concurrent.ConcurrentHashMap");
@@ -53,7 +53,7 @@ public class NamespaceCache {
             noPrefixCache = (Map) construct.newInstance(new Object[] {
                     new Integer(11), new Float(0.75f), new Integer(1) });
         } catch (Throwable t1) {
-            /* Try to use the util.concurrent library (if in classpath) */
+            /* Try to use the Helper.concurrent library (if in classpath) */
             try {
                 Class clazz = Class.forName(CONCURRENTREADERHASHMAP_CLASS);
                 cache = (Map) clazz.newInstance();

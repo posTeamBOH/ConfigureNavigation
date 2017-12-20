@@ -88,7 +88,7 @@ public interface Expr extends Serializable
      * The result will be a <code>java.lang.Double</code> for expressions that 
      * return a number, a <code>java.lang.String</code> for expressions that 
      * return a string, a <code>java.lang.Boolean</code> for expressions that 
-     * return a boolean, and a <code>java.util.List</code> for expressions that
+     * return a boolean, and a <code>java.Helper.List</code> for expressions that
      * return a node-set. In the latter case, the elements of the list are 
      * the actual objects from the source document model. Copies are not made.
      * 
